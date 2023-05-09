@@ -60,14 +60,15 @@
 \include{Dissertation/contents}        % Оглавление
 \ifnumequal{\value{contnumfig}}{1}{}{\counterwithout{figure}{chapter}}
 \ifnumequal{\value{contnumtab}}{1}{}{\counterwithout{table}{chapter}}
-\include{Dissertation/introduction}    % Введение
+\include{sci_report/part_0_intro}    % Введение
 \ifnumequal{\value{contnumfig}}{1}{\counterwithout{figure}{chapter}
 }{\counterwithin{figure}{chapter}}
 \ifnumequal{\value{contnumtab}}{1}{\counterwithout{table}{chapter}
 }{\counterwithin{table}{chapter}}
-\include{Dissertation/part1}           % Глава 1
-\include{Dissertation/part2}           % Глава 2
-\include{Dissertation/part3}           % Глава 3
+\include{sci_report/part_1_review}     % Глава 1
+\include{sci_report/part_2_rom}           % Глава 2
+\include{sci_report/part_3_source}           % Глава 3
+\include{sci_report/part_4_perm}           % Глава 4
 \include{Dissertation/conclusion}      % Заключение
 \include{Dissertation/acronyms}        % Список сокращений и условных обозначений
 \include{Dissertation/dictionary}      % Словарь терминов
@@ -77,14 +78,14 @@
 \setcounter{totalchapter}{\value{chapter}} % Подсчёт количества глав
 
 %%% Настройки для приложений
-\appendix
-% Оформление заголовков приложений ближе к ГОСТ:
-\setlength{\midchapskip}{20pt}
-\renewcommand*{\afterchapternum}{\par\nobreak\vskip \midchapskip}
-\renewcommand\thechapter{\Asbuk{chapter}} % Чтобы приложения русскими буквами нумеровались
+% \appendix
+% % Оформление заголовков приложений ближе к ГОСТ:
+% \setlength{\midchapskip}{20pt}
+% \renewcommand*{\afterchapternum}{\par\nobreak\vskip \midchapskip}
+% \renewcommand\thechapter{\Asbuk{chapter}} % Чтобы приложения русскими буквами нумеровались
 
-\include{Dissertation/appendix}        % Приложения
+% \include{Dissertation/appendix}        % Приложения
 
-\setcounter{totalappendix}{\value{chapter}} % Подсчёт количества приложений
+% \setcounter{totalappendix}{\value{chapter}} % Подсчёт количества приложений
 
 \end{document}
