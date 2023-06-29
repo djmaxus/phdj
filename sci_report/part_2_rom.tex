@@ -1,11 +1,65 @@
 \chapter{Снижение размерности динамической модели нефтегазового месторождения}\label{ch:ch2}
 
 \todo{7 pages}
+\todo{TODO nomenclature}
+
+\newcommand{\bvec}[1]{\mathbf{#1}}
+\newcommand{\resid}{\bvec{r}}
+\newcommand{\unk}{\bvec{u}}
+\newcommand{\jac}{\mathrm{J}}
+\newcommand{\dunk}{\Delta \unk}
+\newcommand{\vunk}{\bvec{v}}
+\newcommand{\matr}[1]{\mathrm{\uppercase{#1}}}
+\newcommand{\norm}[2][~]{\left\| #2  \right\|_{#1}}
+\newcommand{\transpose}[1]{\matr{#1}^\mathrm{T}}
+\newcommand{\dvunk}{\Delta \vunk}
+\newcommand{\deriv}[2]{\frac{\partial #1}{\partial #2}}
 
 \begin{equation}
-    E = m c^2
+   \resid(\unk) = 0
 \end{equation}
 
-\nomenclature{\(E\)}{Энергия\nomrefeq}
-\nomenclature{\(c\)}{скорость света\nomrefpage}
-\nomenclature{\(m\)}{mAss\nomrefeqpage}
+\begin{equation}
+    \unk_\ast = \arg \min_{\unk} \norm{\resid(\unk)}
+\end{equation}
+
+\begin{equation}
+    \resid(\unk + \Delta \unk) \approx \resid(\unk) + \jac(\unk) \dunk
+\end{equation}
+
+\begin{align}
+    \dunk_\ast (\unk) = \arg \min_{\dunk} \norm[2]{\resid(\unk) + \jac(\unk) \dunk} \\
+    \jac = \deriv{\resid}{\unk} \\
+    \jac(\unk) \dunk_\ast = - \resid(\unk)
+\end{align}
+
+\begin{align}
+    \unk_\Phi (\vunk) = \Phi \vunk \\
+    \dim{\vunk} \leq \dim{\unk} \\
+    \norm{\unk_\Phi - \unk} \\
+    \Phi^{-1} = \transpose{\Phi}
+\end{align}
+
+\begin{align}
+    \dvunk_\ast = \arg \min_{\dvunk} \norm[2]{\resid(\Phi \vunk) + \jac(\Phi \vunk) \Phi \dvunk} \\
+    \transpose{P}\jac \dvunk_\ast = - \transpose{P} \resid
+\end{align}
+
+\begin{align}
+    \matr{P}_\text{G} = \Phi \\
+    \matr{P}_\text{LS} = \jac \Phi \\
+    \Delta x \rightarrow 0
+\end{align}
+
+\begin{align}
+    \norm{\resid(\Phi \vunk_\ast)} \\
+    \norm{\transpose{P}\resid(\Phi \vunk_\ast)}
+\end{align}
+
+\begin{equation}
+    \varepsilon_\text{FOM} = \norm{\frac{\resid}{\dim{\resid}}} \leq \varepsilon \\
+\end{equation}
+
+\begin{equation}
+    \varepsilon_\text{ROM} = \norm{\frac{\transpose{\matr{P}_\text{G}}\resid}{\dim{ \transpose{\matr{P}_\text{G}}\resid}}} \leq \varepsilon
+\end{equation}
