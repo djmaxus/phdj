@@ -1,7 +1,13 @@
 \chapter{Снижение размерности динамической модели нефтегазового месторождения}\label{ch:ch2}
 
 \todo{7 pages}
+
 \todo{TODO nomenclature}
+
+\todo{TODO dimensionality of vectors}
+
+
+\section{Снижение размерности нелинейной модели}
 
 \newcommand{\bvec}[1]{\mathbf{#1}}
 \newcommand{\resid}{\bvec{r}}
@@ -14,6 +20,9 @@
 \newcommand{\transpose}[1]{\matr{#1}^\mathrm{T}}
 \newcommand{\dvunk}{\Delta \vunk}
 \newcommand{\deriv}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pc}[1][~]{\bvec{\varphi}_{#1}}
+\newcommand{\param}{\bvec{\mu}}
+\newcommand{\nlin}{\bvec{\eta}}
 
 \begin{equation}
    \resid(\unk) = 0
@@ -63,3 +72,93 @@
 \begin{equation}
     \varepsilon_\text{ROM} = \norm{\frac{\transpose{\matr{P}_\text{G}}\resid}{\dim{ \transpose{\matr{P}_\text{G}}\resid}}} \leq \varepsilon
 \end{equation}
+
+\section{Правильное ортогональное разложение}
+
+\begin{align}
+    \unk_0 \\
+    \unk_n = \arg \min_{\unk} \norm{\resid(\unk,\unk_{n-1};\param)}
+\end{align}
+
+\begin{align}
+    \unk_\text{o} (= \unk_0 (= 0 ?)) \\
+    \matr{U} (\param) =
+    \begin{bmatrix}
+        \unk_0, \unk_1, \dots, \unk_{N_t}
+    \end{bmatrix}
+\end{align}
+
+\begin{align}
+    \matr{u} - \unk_\text{o} = \Phi \Sigma \transpose{\Upsilon} \\
+    \Phi^{-1} = \transpose{\Phi} \\
+    \Phi = \begin{bmatrix}
+        \widetilde{\Phi}, \pc[N_\vunk + 1], \dots
+    \end{bmatrix}
+\end{align}
+
+\begin{align}
+    \unk_{\widetilde{\Phi}} = \widetilde{\Phi} \vunk \\
+    \unk_{\widetilde{\Phi}}(\unk) = \widetilde{\Phi} \transpose{\widetilde{\Phi}} \unk
+\end{align}
+
+\section{Выбор главных компонент в триангулированной области параметров}
+
+\begin{align}
+    \matr{M} =\begin{bmatrix}
+        \param_1, \dots, \param_{N_\param}
+    \end{bmatrix}\\
+    \matr{U}(\matr{M}) =
+    \begin{bmatrix}
+        \matr{U}(\param_1), \dots, \matr{U}(\param_{N_\param})
+    \end{bmatrix}
+    \rightarrow \widetilde{\Phi (\matr{M})} \\
+    \widetilde{\Phi} (\matr{M}) \matr{R}_\text{qr} =
+    \begin{bmatrix}
+        \widetilde{\Phi}(\param_1), \dots,  \widetilde{\Phi}(\param_{N_\param})
+    \end{bmatrix}
+\end{align}
+
+\begin{equation}
+N_\vunk : \widetilde{\Phi} \in \mathbb{R}^{N_\unk \times N_\vunk}
+\end{equation}
+
+\section{Аппроксимация нелинейных функций высокой размерности}
+
+\begin{align}
+ \nlin(\unk) \rightarrow \nlin (\unk_{\widetilde{\Phi}}) = \nlin (\widetilde{\Phi} \vunk) \\
+ \dim{\nlin} \sim \dim{\unk}
+\end{align}
+
+\begin{align}
+    \mathcal{N} =
+    \begin{bmatrix}
+        \nlin_1, \dots,  \nlin_{N_\nlin}
+    \end{bmatrix} \\
+    \mathcal{N} \rightarrow \widetilde{\Phi}_\mathcal{N} \\
+    \nlin \approx \widetilde{\Phi}_\mathcal{N} \bvec{\gamma}
+\end{align}
+
+\begin{align}
+   \bvec{\rho} : \rho_m \in \left\{0, 1 \right\} \\
+   N_{\bvec{\rho}} = \sum_m \rho_m \\
+   \matr{P} \in \mathbb{R}^{\dim{\nlin} \times N_{\bvec{\rho}}} \\
+   \overline{\nlin} = \transpose{P} \nlin
+\end{align}
+
+\begin{align}
+    \widehat{\bvec{\gamma}} = \arg \min_{\bvec{\gamma}} \norm[2]{\transpose{P} \widetilde{\Phi}_\mathcal{N} \bvec{\gamma} - \overline{\nlin}} \\
+    \widehat{\bvec{\gamma}} = {\left( \transpose{P} \widetilde{\Phi}_\mathcal{N} \right)}^\dagger \overline{\nlin} = \mathcal{O} \overline{\nlin} \\
+    \widehat{\nlin} = \widetilde{\Phi}_\mathcal{N} \widehat{\bvec{\gamma}} = \matr{\Pi} \overline{\nlin}
+\end{align}
+
+
+\begin{align}
+    \dvunk_\ast (\vunk)= \arg \min_{\dvunk} \norm[2]{\widehat{\resid}(\Phi \vunk) + \widehat{\jac}(\Phi \vunk) \Phi \dvunk}
+\end{align}
+
+\begin{align}
+    \matr{\Lambda} \nlin \approx
+    \matr{\Lambda} \matr{\Pi} \overline{\nlin} = \widehat{\matr{\Lambda}} \overline{\nlin}
+\end{align}
+
+\section{Иерархическое построение низкоразмерных моделей}
