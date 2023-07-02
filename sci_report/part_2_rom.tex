@@ -6,8 +6,9 @@
 
 \todo{TODO dimensionality of vectors}
 
+\section{Методы анализа данных для снижения размерности и предобуславливания}
 
-\section{Снижение размерности нелинейной модели}
+\subsection{Снижение размерности нелинейной модели}
 
 \newcommand{\bvec}[1]{\mathbf{#1}}
 \newcommand{\resid}{\bvec{r}}
@@ -73,7 +74,7 @@
     \varepsilon_\text{ROM} = \norm{\frac{\transpose{\matr{P}_\text{G}}\resid}{\dim{ \transpose{\matr{P}_\text{G}}\resid}}} \leq \varepsilon
 \end{equation}
 
-\section{Правильное ортогональное разложение}
+\subsection{Правильное ортогональное разложение}
 
 \begin{align}
     \unk_0 \\
@@ -101,7 +102,7 @@
     \unk_{\widetilde{\Phi}}(\unk) = \widetilde{\Phi} \transpose{\widetilde{\Phi}} \unk
 \end{align}
 
-\section{Выбор главных компонент в триангулированной области параметров}
+\subsection{Выбор главных компонент в триангулированной области параметров}
 
 \begin{align}
     \matr{M} =\begin{bmatrix}
@@ -122,7 +123,7 @@
 N_\vunk : \widetilde{\Phi} \in \mathbb{R}^{N_\unk \times N_\vunk}
 \end{equation}
 
-\section{Аппроксимация нелинейных функций высокой размерности}
+\subsection{Аппроксимация нелинейных функций высокой размерности}
 
 \begin{align}
  \nlin(\unk) \rightarrow \nlin (\unk_{\widetilde{\Phi}}) = \nlin (\widetilde{\Phi} \vunk) \\
@@ -157,8 +158,77 @@ N_\vunk : \widetilde{\Phi} \in \mathbb{R}^{N_\unk \times N_\vunk}
 \end{align}
 
 \begin{align}
-    \matr{\Lambda} \nlin \approx
-    \matr{\Lambda} \matr{\Pi} \overline{\nlin} = \widehat{\matr{\Lambda}} \overline{\nlin}
+    \matr{\matr{L}} \nlin \approx
+    \matr{\matr{L}} \matr{\Pi} \overline{\nlin} = \widehat{\matr{\matr{L}}} \overline{\nlin}
 \end{align}
 
-\section{Иерархическое построение низкоразмерных моделей}
+\subsection{Использование данных для предобуславливания}
+
+\begin{equation}
+    \unk_{n+1} \approx \matr{D} \unk_{n}
+\end{equation}
+
+\begin{align}
+    \matr{U}_{-} &=
+    \begin{bmatrix}
+        \unk_0, \dots, \unk_{N_t-1}
+    \end{bmatrix}\\
+    \matr{U}_{+} &=
+    \begin{bmatrix}
+        \unk_1, \dots, \unk_{N_t}
+    \end{bmatrix}
+\end{align}
+
+\begin{align}
+    \matr{D} = \arg \min_{\matr{A}} \norm[\text{fro}]{\matr{U}_{+} - \matr{D} \matr{U}_{-}} = \matr{U}_{+} \matr{U}_{-}^{\dagger}
+\end{align}
+
+\begin{align}
+    \widetilde{\Phi} \vunk_{n+1} \approx  \matr{D} \widetilde{\Phi} \vunk_{n} \\
+    \vunk_{n+1} \approx  \matr{D}_{\widetilde{\Phi}} \vunk_{n} \\
+\end{align}
+
+\begin{align}
+    \left\{ \Psi_{\widetilde{\Phi}},  \widetilde{\Lambda} \right\} : \matr{D}_{\widetilde{\Phi}}  \Psi_{\widetilde{\Phi}} = \Psi_{\widetilde{\Phi}} \widetilde{\Lambda} \\
+    \widetilde{\Psi} = \widetilde{\Phi} \Psi_{\widetilde{\Phi}} \widetilde{\Lambda} \\
+    \matr{D} \widetilde{\Psi} = \widetilde{\Psi}\widetilde{\Lambda} \\
+    \left\{\widetilde{\Psi},  \widetilde{\Lambda} \right\} \rightarrow \widetilde{\matr{D}}\\
+    \unk_{n+1} \approx \widetilde{\matr{D}} \unk_{n}
+\end{align}
+
+\begin{align}
+   \unk \rightarrow \nlin(\unk) \rightarrow \matr{D}_{\nlin}
+\end{align}
+
+\begin{align}
+    \exists \nlin(\unk), \matr{\mathcal{K}} : \nlin_{n+1} \equiv \matr{\mathcal{K}}  \nlin_{n}
+ \end{align}
+
+\begin{align}
+    \unk_{n+1} \approx \matr{D} \unk_{n} + \matr{B} \bvec{q}_{n} + \matr{C} \bvec{q}_{n+1}
+\end{align}
+
+\subsection{\todo{Иерархия эмпирических методов ускоренного моделирования}}
+
+\subsubsection{\todo{Накопление данных в итеративных прямых расчётах}}
+
+multi-level Monte Carlo
+
+\section{\todo{Система уравнений чёрной нефти}}
+
+\begin{multline}
+    \deriv{~}{t}\left(
+        \varphi \matr{R}_{\alpha A} \frac{s_A}{b_A}
+    \right) - \overrightarrow{\nabla} \left[
+        \matr{R}_{\alpha A} \left(
+            K\frac{\varkappa_A}{\mu_A b_A}\nabla p
+        \right)
+    \right] \\
+    = \matr{R}_{\alpha A}
+    \frac{2\pi K \varkappa_A}{\mu_A b_A \ln(r_c r_\text{well}^{-1})}
+    \left(p - p_\text{well}\right)
+\end{multline}
+
+\begin{align}
+    \sum_A s_A = 1
+\end{align}
