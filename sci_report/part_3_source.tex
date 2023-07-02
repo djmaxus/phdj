@@ -1,3 +1,53 @@
 \chapter{Построение низкоразмерных моделей при вариациях положения управляющих воздействий}\label{ch:ch3}
 
 \todo{4 pages}
+
+\begin{equation}
+    \deriv{u}{t} - \varkappa \deriv[2]{u}{x} = q
+\end{equation}
+
+\begin{align}
+    \deriv{\check{t}}{t} = \alpha = \text{const} \\
+    \deriv{\check{x}}{x} = \beta = \text{const} \\
+\end{align}
+
+\begin{equation}
+    \deriv{u}{\check{t}} - \frac{\beta^2}{\alpha} \varkappa \deriv[2]{u}{\check{x}} = \frac{q}{\alpha}
+\end{equation}
+
+\begin{align}
+    \deriv{u}{t} - \varkappa \left(\deriv[2]{u}{x} + \deriv[2]{u}{y} \right) = q \\
+    \deriv{\check{y}}{y} = \gamma = \text{const}
+\end{align}
+
+\begin{equation}
+    \deriv{u}{\check{t}} - \frac{\varkappa }{\alpha} \left(
+        \beta^2 \deriv[2]{u}{\check{x}} + \gamma^2 \deriv[2]{u}{\check{y}}
+        \right) = \frac{q}{\alpha}
+\end{equation}
+
+\begin{align}
+    \matr{U}_{X} = \begin{bmatrix}
+        \dots \\
+        \matr{U}_{X_i}\\
+         \dots
+    \end{bmatrix}
+    \in \mathbb{R}^{N_x \times N_y (N_{t}+1)} \\
+    \matr{U}_{Y} = \begin{bmatrix}
+        \dots \\
+        \matr{U}_{Y_j}\\
+         \dots
+    \end{bmatrix}
+    \in \mathbb{R}^{N_y \times N_x (N_{t}+1)} \\
+    \matr{U}_{X_i} \rightarrow \widetilde{\Phi}_{X_i} \\
+    \matr{U}_{Y_j} \rightarrow \widetilde{\Phi}_{Y_j}
+\end{align}
+
+\begin{align}
+    \widetilde{\Phi}_{ij} \matr{R}_\text{qr}
+    = \widetilde{\Phi}_{X_i} \otimes \widetilde{\Phi}_{Y_j} \\
+\end{align}
+
+\begin{align}
+    d(x,t) : \left. u \right\vert_{x_{q2}}(x,t) = \left. u \right\vert_{x_{q1}}(d(x,t),t)
+\end{align}
