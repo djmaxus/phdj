@@ -71,7 +71,7 @@
 \end{figure}
 
 
-\section{Методы анализа данных для снижения размерности и предобуславливания}
+\section{Методы анализа данных для снижения размерности}
 
 В данном разделе приведены используемые в работе основные методы эмпирического снижения размерности и соответствующие выдвигаемые положения.
 
@@ -102,7 +102,7 @@
 
 Подстановка переменных $\vunk$ в линейную задачу \ref{eq:du} приводит к линейной задаче, переопределенной в общем случае.
 \begin{align}
-    \dvunk_\ast = \arg \min_{\dvunk} \norm[2]{\resid(\Phi \vunk) + \jac(\Phi \vunk) \Phi \dvunk} \\
+    \dvunk_\ast = \arg \min_{\dvunk} \norm[2]{\resid(\Phi \vunk) + \jac(\Phi \vunk) \Phi \dvunk} \label{eq:dv}\\
     \transpose{P}\jac \dvunk_\ast = - \transpose{P} \resid \label{eq:dv-projected}
 \end{align}
 
@@ -232,17 +232,17 @@
     \caption{Пример главных компонент нелинейных функций и выбранного подпространства нелинейных изменений (вертикальные штрихи)~\cite{Elizarev2022}}\label{fig:gappy}
 \end{figure}
 
+Для вычисления эмпирической интерполяции поиск вектора в пространстве главных компонент, максимально соответствующего вычисленным значениям $\overline{\nlin}$ при его проекции на пространство нелинейных измерений. Решение соответствует операции косой проекции $\mathcal{O}$ из $\widetilde{\Phi}_\mathcal{N}$ на $\matr{P}$ ортогонально последнему.
 \begin{align}
     \widehat{\bvec{\gamma}} = \arg \min_{\bvec{\gamma}} \norm[2]{\transpose{P} \widetilde{\Phi}_\mathcal{N} \bvec{\gamma} - \overline{\nlin}} \\
     \widehat{\bvec{\gamma}} = {\left( \transpose{P} \widetilde{\Phi}_\mathcal{N} \right)}^\dagger \overline{\nlin} = \mathcal{O} \overline{\nlin} \\
     \widehat{\nlin} = \widetilde{\Phi}_\mathcal{N} \widehat{\bvec{\gamma}} = \matr{\Pi} \overline{\nlin}
 \end{align}
-
-
+При подстановке аппроксимированных нелинейных функций в задачу \ref{eq:dv} формируется низкоразмерная модель следующего уровня.
 \begin{align}
     \dvunk_\ast (\vunk)= \arg \min_{\dvunk} \norm[2]{\widehat{\resid}(\Phi \vunk) + \widehat{\jac}(\Phi \vunk) \Phi \dvunk}
 \end{align}
-
+Также отмечается важная особенность аппроксимации нелинейных функций. Предлагается не включать в аппроксимируемые функции линейные операции, в том числе соответствующие конечно-разностным аппроксимациям производных. Такой подход сохраняет характерные и необходимые для многих численных методов свойства возникающих матриц и позволяет заранее предварительно рассчитывать матричные произведения с оператором косой проекции.
 \begin{align}
     \matr{\matr{L}} \nlin \approx
     \matr{\matr{L}} \matr{\Pi} \overline{\nlin} = \widehat{\matr{\matr{L}}} \overline{\nlin}
@@ -252,64 +252,64 @@
     \centerfloat{
         \includegraphics[width=\textwidth]{./sci_report/images/ECMOR/7-ROM-II-Train.png}
     }
-    \caption{\todo{caption} \cite{Elizarev2022}}\label{fig:ROM-II}
+    \caption{Пример ускорения, достигаемого при низкоразмерном моделировании с эмпирической интерполяцией нелинейных функций~\cite{Elizarev2022}}\label{fig:ROM-II}
 \end{figure}
 
-\subsection{Использование данных для предобуславливания}
+% \subsection{Использование данных для предобуславливания}
 
-\begin{equation}
-    \unk_{n+1} \approx \matr{D} \unk_{n}
-\end{equation}
+% \begin{equation}
+%     \unk_{n+1} \approx \matr{D} \unk_{n}
+% \end{equation}
 
-\begin{align}
-    \matr{U}_{-} &=
-    \begin{bmatrix}
-        \unk_0, \dots, \unk_{N_t-1}
-    \end{bmatrix}\\
-    \matr{U}_{+} &=
-    \begin{bmatrix}
-        \unk_1, \dots, \unk_{N_t}
-    \end{bmatrix}
-\end{align}
+% \begin{align}
+%     \matr{U}_{-} &=
+%     \begin{bmatrix}
+%         \unk_0, \dots, \unk_{N_t-1}
+%     \end{bmatrix}\\
+%     \matr{U}_{+} &=
+%     \begin{bmatrix}
+%         \unk_1, \dots, \unk_{N_t}
+%     \end{bmatrix}
+% \end{align}
 
-\begin{align}
-    \matr{D} = \arg \min_{\matr{A}} \norm[\text{fro}]{\matr{U}_{+} - \matr{D} \matr{U}_{-}} = \matr{U}_{+} \matr{U}_{-}^{\dagger}
-\end{align}
+% \begin{align}
+%     \matr{D} = \arg \min_{\matr{A}} \norm[\text{fro}]{\matr{U}_{+} - \matr{D} \matr{U}_{-}} = \matr{U}_{+} \matr{U}_{-}^{\dagger}
+% \end{align}
 
-\begin{align}
-    \widetilde{\Phi} \vunk_{n+1} \approx  \matr{D} \widetilde{\Phi} \vunk_{n} \\
-    \vunk_{n+1} \approx  \matr{D}_{\widetilde{\Phi}} \vunk_{n} \\
-\end{align}
+% \begin{align}
+%     \widetilde{\Phi} \vunk_{n+1} \approx  \matr{D} \widetilde{\Phi} \vunk_{n} \\
+%     \vunk_{n+1} \approx  \matr{D}_{\widetilde{\Phi}} \vunk_{n} \\
+% \end{align}
 
-\begin{align}
-    \left\{ \Psi_{\widetilde{\Phi}},  \widetilde{\Lambda} \right\} : \matr{D}_{\widetilde{\Phi}}  \Psi_{\widetilde{\Phi}} = \Psi_{\widetilde{\Phi}} \widetilde{\Lambda} \\
-    \widetilde{\Psi} = \widetilde{\Phi} \Psi_{\widetilde{\Phi}} \widetilde{\Lambda} \\
-    \matr{D} \widetilde{\Psi} = \widetilde{\Psi}\widetilde{\Lambda} \\
-    \left\{\widetilde{\Psi},  \widetilde{\Lambda} \right\} \rightarrow \widetilde{\matr{D}}\\
-    \unk_{n+1} \approx \widetilde{\matr{D}} \unk_{n}
-\end{align}
+% \begin{align}
+%     \left\{ \Psi_{\widetilde{\Phi}},  \widetilde{\Lambda} \right\} : \matr{D}_{\widetilde{\Phi}}  \Psi_{\widetilde{\Phi}} = \Psi_{\widetilde{\Phi}} \widetilde{\Lambda} \\
+%     \widetilde{\Psi} = \widetilde{\Phi} \Psi_{\widetilde{\Phi}} \widetilde{\Lambda} \\
+%     \matr{D} \widetilde{\Psi} = \widetilde{\Psi}\widetilde{\Lambda} \\
+%     \left\{\widetilde{\Psi},  \widetilde{\Lambda} \right\} \rightarrow \widetilde{\matr{D}}\\
+%     \unk_{n+1} \approx \widetilde{\matr{D}} \unk_{n}
+% \end{align}
 
-\begin{align}
-   \unk \rightarrow \nlin(\unk) \rightarrow \matr{D}_{\nlin}
-\end{align}
+% \begin{align}
+%    \unk \rightarrow \nlin(\unk) \rightarrow \matr{D}_{\nlin}
+% \end{align}
 
-\begin{align}
-    \exists \nlin(\unk), \matr{\mathcal{K}} : \nlin_{n+1} \equiv \matr{\mathcal{K}}  \nlin_{n}
- \end{align}
+% \begin{align}
+%     \exists \nlin(\unk), \matr{\mathcal{K}} : \nlin_{n+1} \equiv \matr{\mathcal{K}}  \nlin_{n}
+%  \end{align}
 
-\begin{align}
-    \unk_{n+1} \approx \matr{D} \unk_{n} + \matr{B} \bvec{q}_{n} + \matr{C} \bvec{q}_{n+1}
-\end{align}
+% \begin{align}
+%     \unk_{n+1} \approx \matr{D} \unk_{n} + \matr{B} \bvec{q}_{n} + \matr{C} \bvec{q}_{n+1}
+% \end{align}
 
-\subsection{\todo{Иерархия эмпирических методов ускоренного моделирования}}
+% \subsection{\todo{Иерархия эмпирических методов ускоренного моделирования}}
 
 \begin{figure}[ht]
     \centerfloat{
         \includegraphics[width=\textwidth]{./sci_report/images/seminar/ROM-ROM-3.png}
     }
-    \caption{\todo{caption} \cite{Elizarev2022}}\label{fig:ROM-II}
+    \caption{Диаграмма условных уровней эмпирического низкоразмерного моделирования}\label{fig:ROM-II}
 \end{figure}
 
-\subsubsection{\todo{Накопление данных в итеративных прямых расчётах}}
+% \subsubsection{\todo{Накопление данных в итеративных прямых расчётах}}
 
-multi-level Monte Carlo
+% multi-level Monte Carlo
