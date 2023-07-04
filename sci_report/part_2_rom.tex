@@ -4,6 +4,8 @@
 
 \todo{TODO nomenclature}
 
+\todo{TODO dimensionality of vectors}
+
 \newcommand{\bvec}[1]{\mathbf{#1}}
 \newcommand{\resid}{\bvec{r}}
 \newcommand{\unk}{\bvec{u}}
@@ -19,106 +21,132 @@
 \newcommand{\param}{\bvec{\mu}}
 \newcommand{\nlin}{\bvec{\eta}}
 
-\todo{TODO dimensionality of vectors}
+В данной главе описаны рассматриваемые в работе определяющие уравнения, представляющие интерес в сфере нефтегазового моделирования, базовые методы эмпирического низкоразмерного моделирования и соответствующие положения о подходе к построению таких моделей.
 
 \section{Определяющие уравнения}
 
+\subsection{\todo{Система уравнений чёрной нефти}}
+
+Широко используемой моделью течения многофазного флюида в пористой среде, на которую воздействует система скважин, является система уравнений чёрной нефти  с источниковыми членами по формуле Писмана \todo{\cite{}}.
+
+\begin{multline}
+    \label{eq:blackoil}
+    \deriv{~}{t}\left(
+        \varphi \matr{R}_{\alpha A} \frac{s_A}{b_A}
+    \right) - \overrightarrow{\nabla} \left[
+        \matr{R}_{\alpha A} \left(
+            K\frac{\kappa_A}{\mu_A b_A}\nabla p
+        \right)
+    \right] \\
+    = \matr{R}_{\alpha A}
+    \frac{2\pi K \kappa_A}{\mu_A b_A \ln(r_c r_\text{well}^{-1})}
+    \left(p - p_\text{well}\right)
+\end{multline}
+
+\begin{align}
+    \label{eq:sats}
+    \sum_A s_A = 1
+\end{align}
+
+Соотношение~\ref{eq:blackoil} представляет собой уравнение неразрывности потока многофазного многокомпонентного флюида с замыкающим соотношением нормировки насыщенностей фаз~\ref{eq:sats}.
+В численных экспериментах используется конечно-разностная дискретизация модели черной нефти в программной библиотеке MATLAB Reservoir Simulation Toolbox (MRST) \todo{\cite{}}.
+
 \subsection{Модельная задача}
+
+В численных экспериментах так же используется модельная задача нелинейной диффузии в одномерном пространстве, замкнутая начальным условием и краевыми условиями Дирихле.
+
+\begin{equation} \label{eq:diffusion}
+   u(x,t): \deriv{u}{t} - \deriv{}{x} \left[\kappa(x, u) \deriv{u}{x} \right]= q \delta (x - x_q)
+\end{equation}
+
+Свойства этого модельного уравнения характеры так же и для поля давлений в уравнении~\ref{eq:blackoil}: это нестационарный диффузионный процесс в однородной среде с точечным источником. Более того, система уравнений чёрной нефти принимает аналогичный вид в приближении однофазного течения в одномерной среде.
+
+В численных экспериментах задача решалась численно полностью неявной схемой с конечно-разностной пространственной дискретизацией.
 
 \begin{figure}[ht]
     \centerfloat{
         \includegraphics[width=\textwidth,trim={0 1.5cm 0 2.5cm},clip]{./sci_report/images/ECMOR/1-FOM.png}
     }
-    \caption{\todo{caption}}\label{fig:FOM}
+    \caption{Пример постановки задачи \ref{eq:diffusion} с симметричным граничным условием Дирихле $u_\text{B}$ и её численного решения \cite{Elizarev2022}}\label{fig:FOM}
 \end{figure}
 
-\subsection{\todo{Система уравнений чёрной нефти}}
-
-\begin{multline}
-    \deriv{~}{t}\left(
-        \varphi \matr{R}_{\alpha A} \frac{s_A}{b_A}
-    \right) - \overrightarrow{\nabla} \left[
-        \matr{R}_{\alpha A} \left(
-            K\frac{\varkappa_A}{\mu_A b_A}\nabla p
-        \right)
-    \right] \\
-    = \matr{R}_{\alpha A}
-    \frac{2\pi K \varkappa_A}{\mu_A b_A \ln(r_c r_\text{well}^{-1})}
-    \left(p - p_\text{well}\right)
-\end{multline}
-
-\begin{align}
-    \sum_A s_A = 1
-\end{align}
 
 \section{Методы анализа данных для снижения размерности и предобуславливания}
 
+В данном разделе приведены используемые в работе основные методы эмпирического снижения размерности и соответствующие выдвигаемые положения.
+
 \subsection{Снижение размерности нелинейной модели}
 
-\begin{equation}
-   \resid(\unk) = 0
-\end{equation}
-
-\begin{equation}
-    \unk_\ast = \arg \min_{\unk} \norm{\resid(\unk)}
-\end{equation}
-
-\begin{equation}
-    \resid(\unk + \Delta \unk) \approx \resid(\unk) + \jac(\unk) \dunk
-\end{equation}
+Рассматривается задача решения системы нелинейных алгебраических уравнений, соответствующая поиску численного решения определяющего уравнения на том или ином временном шаге.
 
 \begin{align}
-    \dunk_\ast (\unk) = \arg \min_{\dunk} \norm[2]{\resid(\unk) + \jac(\unk) \dunk} \\
-    \jac = \deriv{\resid}{\unk} \\
+    \unk_\ast : \resid(\unk_\ast) = 0 \\
+   \unk_\ast = \arg \min_{\unk} \norm{\resid(\unk)}
+\end{align}
+
+В качестве метода решения нелинейной системы рассматривается метод Ньютона и соответствующая детерминированная линейная задача, решаемую на итерациях этого метода. Вычислительная сложность линейной задачи растёт полиномиально с $\dim \unk$.
+\begin{align}
+    \resid(\unk + \Delta \unk) \approx \resid(\unk) + \jac(\unk) \dunk ,\; \jac = \deriv{\resid}{\unk}\\
+    \dunk_\ast (\unk) = \arg \min_{\dunk} \norm[2]{\resid(\unk) + \jac(\unk) \dunk} \label{eq:du}\\
     \jac(\unk) \dunk_\ast = - \resid(\unk)
 \end{align}
 
-\begin{align}
-    \unk_\Phi (\vunk) = \Phi \vunk \\
-    \dim{\vunk} \leq \dim{\unk} \\
-    \norm{\unk_\Phi - \unk} \\
-    \Phi^{-1} = \transpose{\Phi}
-\end{align}
+Далее рассматривается абстрактное линейное подпространство с ортогональным базисом $\Phi^{-1} = \transpose{\Phi}$ в качестве аппроксимирующей замены переменной $\unk_\Phi (\vunk) = \Phi \vunk$ такой, что $\dim{\vunk} \leq \dim{\unk}$. Качество аппроксимации количественно измеряется с помощью евклидовой нормы $\norm[2]{\unk_\Phi - \unk}$.
 
+% \begin{align}
+%     \unk_\Phi (\vunk) = \Phi \vunk \\
+%     \dim{\vunk} \leq \dim{\unk} \\
+%     \norm{\unk_\Phi - \unk} \\
+%     \Phi^{-1} = \transpose{\Phi}
+% \end{align}
+
+Подстановка переменных $\vunk$ в линейную задачу \ref{eq:du} приводит к линейной задаче, переопределенной в общем случае.
 \begin{align}
     \dvunk_\ast = \arg \min_{\dvunk} \norm[2]{\resid(\Phi \vunk) + \jac(\Phi \vunk) \Phi \dvunk} \\
-    \transpose{P}\jac \dvunk_\ast = - \transpose{P} \resid
+    \transpose{P}\jac \dvunk_\ast = - \transpose{P} \resid \label{eq:dv-projected}
 \end{align}
 
+Проекция на $\matr{P} \in \mathbb{R}^{\dim \unk \times \dim \vunk}$ в уравнении \ref{eq:dv-projected} формирует детерминированную задачу.
+В качестве $\matr{P}$ рассматриваются проекция Галеркина $\matr{P}_\text{G}$ и проекция для задачи наименьших квадратов $\matr{P}_\text{LS}$ \todo{\cite{}}.
+% В последнем случае метод решения нелинейной системы эквивалентен методу Ньютона --- Гаусса для переопределённых систем.
 \begin{align}
     \matr{P}_\text{G} = \Phi \\
     \matr{P}_\text{LS} = \jac \Phi \\
-    \Delta x \rightarrow 0
 \end{align}
 
+Результат соответствующего итерационного процесса $\vunk_\ast$ характеризуется тем, что норма невязки в этом процессе в общем случае сходится к положительному значению в отличие от полноразмерной детерминированной задачи. При этом норма спроецированной невязки в сходящемся процессе сходится к нулю.
 \begin{align}
-    \norm{\resid(\Phi \vunk_\ast)} \\
+    \norm{\resid(\Phi \vunk_\ast)} \geq 0\\
     \norm{\transpose{P}\resid(\Phi \vunk_\ast)}
 \end{align}
 
+Предлагается следующее решение для оценки сходимости низкоразмерной задачи.
+Пусть для нормированной невязки полноразмерной задачи в качестве критерия сходимости выбрано значение $\varepsilon > 0$. Пусть также низкоразмерная задача решается в проекции на $\matr{P}_{\text{LS}}$ как наиболее предпочтительной \todo{\cite{}}.
 \begin{equation}
     \varepsilon_\text{FOM} = \norm{\frac{\resid}{\dim{\resid}}} \leq \varepsilon \\
 \end{equation}
-
+Кроме того, делается предположение о том, что в соответствующем процессе сходится к нулю и спроецированная на $\norm{\transpose{P}_\text{G}\resid}$. Тогда для сопоставления сходимости низкоразмерных и низкоразмерных задач предлагается использовать следующий критерий вне зависимости от выбранной для итерационного процесса проекции.
 \begin{equation}
     \varepsilon_\text{ROM} = \norm{\frac{\transpose{\matr{P}_\text{G}}\resid}{\dim{ \transpose{\matr{P}_\text{G}}\resid}}} \leq \varepsilon
 \end{equation}
 
 \subsection{Правильное ортогональное разложение}
 
-\begin{align}
-    \unk_0 \\
-    \unk_n = \arg \min_{\unk} \norm{\resid(\unk,\unk_{n-1};\param)}
-\end{align}
+Рассматривается абстрактная динамическая задача конечной размерности $N_\unk = \dim \unk$ с начальным условием $\unk_0$ и параметрами $\param$.
+\begin{equation}
+    \unk_n = \arg \min_{\unk} \norm{\resid_n(\unk,\unk_{n-1};\param)}
+\end{equation}
 
+Метод правильного ортогонального разложения, также известного как метод главных компонент \todo{\cite{}}, использует последовательность решений $\unk_n$ как выборку, формирующую матрицу данных $\matr{U} (\param)$.
 \begin{align}
-    \unk_\text{o} (= \unk_0 (= 0 ?)) \\
+    \unk_\text{o} (= \unk_0) \\
     \matr{U} (\param) =
     \begin{bmatrix}
         \unk_0, \unk_1, \dots, \unk_{N_t}
     \end{bmatrix}
 \end{align}
 
+Далее возможно сместить выборку на $\unk_\text{o}$ (равное, например, начальному условию $\unk_0$) и рассмотреть левые сингулярные вектора из соответствующего разложения, упорядоченного по убыванию сингулярных чисел.
 \begin{align}
     \matr{u} - \unk_\text{o} = \Phi \Sigma \transpose{\Upsilon} \\
     \Phi^{-1} = \transpose{\Phi} \\
@@ -126,7 +154,7 @@
         \widetilde{\Phi}, \pc[N_\vunk + 1], \dots
     \end{bmatrix}
 \end{align}
-
+Усеченный набор главных компонент (сингулярных векторов) формирует эмпирическую линейную замену переменных $\widetilde{\Phi}$.
 \begin{align}
     \unk_{\widetilde{\Phi}} = \widetilde{\Phi} \vunk \\
     \unk_{\widetilde{\Phi}}(\unk) = \widetilde{\Phi} \transpose{\widetilde{\Phi}} \unk
@@ -136,52 +164,54 @@
     \centerfloat{
         \includegraphics[scale=1]{./sci_report/images/ECMOR/2-POD.png}
     }
-    \caption{\todo{caption} \cite{Elizarev2022}}\label{fig:POD}
+    \caption{Пример базисных векторов правильного ортогонального разложения для модельной задачи \ref{eq:diffusion}~\cite{Elizarev2022}}\label{fig:POD}
 \end{figure}
 
-\subsection{Выбор главных компонент в триангулированной области параметров}
+Одним из основных аспектов применимости эмпирического снижения размерности является репрезентативность извлечённых главных компонент для произвольной точки в пространстве параметров $\param$ и достаточность малого количества главных компонент для желаемой точности низкоразмерного расчёта.
 
 \begin{figure}[ht]
     \centerfloat{
         \includegraphics[scale=1]{./sci_report/images/ECMOR/6-Train-Test.png}
     }
-    \caption{\todo{caption} \cite{Elizarev2022}}\label{fig:params}
+    \caption{Пример элементов обучающей выборки (чёрные точки) и тестовой (красной) точки в пространстве параметров модельной задачи~\cite{Elizarev2022}}\label{fig:params}
 \end{figure}
 
 \begin{align}
     \matr{M} =\begin{bmatrix}
         \param_1, \dots, \param_{N_\param}
-    \end{bmatrix}\\
+    \end{bmatrix} \label{eq:param-space}\\
     \matr{U}(\matr{M}) =
     \begin{bmatrix}
         \matr{U}(\param_1), \dots, \matr{U}(\param_{N_\param})
     \end{bmatrix}
-    \rightarrow \widetilde{\Phi (\matr{M})} \\
+    \rightarrow \widetilde{\Phi (\matr{M})} \label{eq:param-concat}\\
     \widetilde{\Phi} (\matr{M}) \matr{R}_\text{qr} =
     \begin{bmatrix}
         \widetilde{\Phi}(\param_1), \dots,  \widetilde{\Phi}(\param_{N_\param})
-    \end{bmatrix}
+    \end{bmatrix} \label{eq:param-pod-qr}
 \end{align}
 
-\begin{equation}
-N_\vunk : \widetilde{\Phi} \in \mathbb{R}^{N_\unk \times N_\vunk}
-\end{equation}
+Для точек обучающей выборки $\matr{M}$ в уравнении \ref{eq:param-space} рассматриваются альтернативные варианты построения главных компонент.
+Вариант в соотношении \ref{eq:param-concat} предполагает извлечение главных компонент из конкатенации матриц данных, в то время как соотношение \ref{eq:param-pod-qr} соответствует конкатенации независимых наборов главных компонент с дополнительно произведенной ортогонализацией.
+Предпочтение отдаётся второму варианту как требующего меньшего количества вычислений и потребления памяти при формировании главных компонент по выбранному набору точек в пространстве параметров.
+% \begin{equation}
+% N_\vunk : \widetilde{\Phi} \in \mathbb{R}^{N_\unk \times N_\vunk}
+% \end{equation}
 
 \begin{figure}[ht]
     \centerfloat{
         \includegraphics[width=\textwidth]{./sci_report/images/ECMOR/3-ROM-I.png}
     }
-    \caption{\todo{caption} \cite{Elizarev2022}}\label{fig:ROM-I}
+    \caption{Пример ускорения решения линейной задачи с помощью правильного ортогонального разложения~\cite{Elizarev2022}}\label{fig:ROM-I}
 \end{figure}
 
 \subsection{Аппроксимация нелинейных функций высокой размерности}
 
-\begin{align}
- \nlin(\unk) \rightarrow \nlin (\unk_{\widetilde{\Phi}}) = \nlin (\widetilde{\Phi} \vunk) \\
- \dim{\nlin} \sim \dim{\unk}
-\end{align}
+На Рисунке~\ref{fig:ROM-I} в том числе отражена проблематика снижения размерности нелинейных моделей: Количество нелинейных вычислений, на которые может приходиться значительная доля времени решения полноразмерной задачи, не сокращается вместе с размерностью пространства неизвестных. В данном подразделе рассматривается метод эмпирической интерполяции нелинейных функций, так же использующий правильное ортогональное разложение.
 
+Рассматривается аналогичная выборка нелинейных функций высокой размерности $\nlin$, формируются главные компоненты $\widetilde{\Phi}_\mathcal{N}$.
 \begin{align}
+    \nlin(\unk) \rightarrow \nlin (\unk_{\widetilde{\Phi}}) = \nlin (\widetilde{\Phi} \vunk),~\dim{\nlin} \sim \dim{\unk} \\
     \mathcal{N} =
     \begin{bmatrix}
         \nlin_1, \dots,  \nlin_{N_\nlin}
@@ -189,19 +219,17 @@ N_\vunk : \widetilde{\Phi} \in \mathbb{R}^{N_\unk \times N_\vunk}
     \mathcal{N} \rightarrow \widetilde{\Phi}_\mathcal{N} \\
     \nlin \approx \widetilde{\Phi}_\mathcal{N} \bvec{\gamma}
 \end{align}
-
+Далее выбирается $N_{\bvec{\rho}} < \dim{\nlin}$ компонент вектора $\nlin$, вычисляемых непосредственно. Соответствующее подпространство компонент $P$ назовём подпространством нелинейных измерений, в котором непосредственно вычисленные компоненты формируют вектор $\overline{\nlin}$.
 \begin{align}
-   \bvec{\rho} : \rho_m \in \left\{0, 1 \right\} \\
-   N_{\bvec{\rho}} = \sum_m \rho_m \\
-   \matr{P} \in \mathbb{R}^{\dim{\nlin} \times N_{\bvec{\rho}}} \\
-   \overline{\nlin} = \transpose{P} \nlin
+   \bvec{\rho} : \rho_m \in \left\{0, 1 \right\},~N_{\bvec{\rho}} = \sum_m \rho_m \\
+   \overline{\nlin} = \transpose{P} \nlin,~\matr{P} \in \mathbb{R}^{\dim{\nlin} \times N_{\bvec{\rho}}}
 \end{align}
 
 \begin{figure}[ht]
     \centerfloat{
         \includegraphics[scale=1]{sci_report/images/ECMOR/4-Gappy.png}
     }
-    \caption{\todo{caption}~\cite{Elizarev2022}}\label{fig:gappy}
+    \caption{Пример главных компонент нелинейных функций и выбранного подпространства нелинейных изменений (вертикальные штрихи)~\cite{Elizarev2022}}\label{fig:gappy}
 \end{figure}
 
 \begin{align}
