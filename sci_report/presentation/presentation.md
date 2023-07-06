@@ -128,6 +128,8 @@ TODO: Carlberg, ускорение моделирования
 
 ## Определяющие уравнения
 
+и их свойства
+
 ---
 
 ### Система уравнений чёрной нефти
@@ -155,18 +157,92 @@ $$
 
 ---
 
-### Модельные задачи
+### Нелинейная диффузия
 
+$$
+   u(x,t): \frac{\partial u}{\partial t} - \frac{\partial}{\partial x} \left[\textcolor{purple}{\kappa}(x) \textcolor{red}{\eta}(u) \frac{\partial u}{\partial x}  \right]= q \delta (x - \textcolor{green}{x_q})
+$$
 
+- нелинейная динамика
+- неоднородная среда
+- точечное управляющее воздействие
+---
+
+![width:900px](./1-FOM.png)
+Постановка и решение характерной задачи
+
+---
+### Абстрактная нелинейная задача
+
+Конечно-разностная динамическая задача
+c параметрами $\mathbf{\mu}$ и начальным условием $\mathbf{u}_{0}$
+
+$$
+{\mathbf{u}_n} = \arg \min_{\mathbf{u}}
+\left\|\mathbf{r}_n(\mathbf{u},\mathbf{u}_{n-1};\mathbf{\mu})\right\|
+$$
+
+Итерация метода Ньютона дискретизованной задачи
+
+$$
+{\Delta \mathbf{u}}_\ast = \arg \min_{{\Delta \mathbf{u}}}
+\left\|{\mathbf{r}(\mathbf{u}) + \mathrm{J}(\mathbf{u}) {\Delta \mathbf{u}}}\right\|
+$$
 ---
 
 ## Снижение размерности с помощью данных
 
 ---
 
+![fit]()
+TODO паттерны как частично решенная система
+
+---
+
 ### Правильное ортогональное разложение
 
+![bg left:30% 99%](../images/Lecture/2-PCA-2D.png)
+
+Сингулярное разложение матрицы данных
+$$
+\mathrm{U}(\mu) = \left[ \mathbf{u}_0, \dots,  \mathbf{u}_{N_t}\right] = \Phi \Sigma \Upsilon^{\text{T}}
+$$
+
+**Главные компоненты** (корреляции) в пространстве
+$$
+\begin{matrix}
+\Phi = \left[ \widetilde{\Phi}, \dots\right]
+\end{matrix}
+$$
+
+Низкоранговая аппроксимация исходных переменных
+
+$$
+\mathbf{u}_{\widetilde{\Phi}} = \widetilde{\Phi} \mathbf{v}, \dim{\mathbf{v}} \ll \dim{\mathbf{u}}
+$$
+
+---
+![bg left:61.8% 99%](../images/ECMOR/2-POD.png)
+
+Главные компоненты
+нелинейной диффузии
+с источником
+
+---
+
 #### Сходимость низкоразмерных моделей
+
+Эмпирически-аппроксимированная нелинейная задача
+
+$$
+asd
+$$
+
+---
+
+![width:990px](../images/ECMOR/3-ROM-I.png)
+
+Качество и производительность низкоразмерного представления
 
 ---
 
