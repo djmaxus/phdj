@@ -305,18 +305,50 @@ $$
 
 ---
 
+Главные компоненты нелинейной функции $\mathbf{g}(\mathbf{u})$
+$$
+\mathcal{F} = \left[
+\mathbf{f}_1, \dots
+\right] \rightarrow
+\widetilde{\Phi}_\mathcal{F}
+$$
+
+**Подпространство нелинейных измерений** $\mathrm{P}$
+
+Подмножество компонент вектора $\mathbf{g}$, вычисляемых *непосредственно*.
+$\mathrm{P}$ — подмножество соответствующих базисных векторов.
+
+Проекция на подпространство — применение маски
+$$
+\overline{\mathbf{f}} = \mathrm{P}^\text{T} \mathbf{f}
+$$
+
+---
+
 ![width:990px](../images/ECMOR/4-Gappy.png)
 
 Пример подпространства нелинейных измерений
 
 ---
 
-![bg left:50% 99%](../images/Lecture/gappy-full.png)
+![bg left:40% 99%](../images/Lecture/gappy-full.png)
 
 #### Эмпирическая интерполяция косыми проекциями
 
-фывф
+$$
+\widehat{\mathbf{g}} = \arg \min_\mathbf{g}
+\left\|
+\mathrm{P}^\text{T} \widetilde{\Phi}_\mathcal{F} \mathbf{g} - \overline{\mathbf{f}}
+\right\|
+$$
+Косая проекция из $\widetilde{\Phi}_\mathcal{F}$ ортогонально на $\mathrm{P}$
 
+$$
+\widehat{\mathbf{f}}(\overline{\mathbf{f}})
+= \widetilde{\Phi}_\mathcal{F}(\mathrm{P}^\text{T} \widetilde{\Phi}_\mathcal{F})^\dagger
+\overline{\mathbf{f}} =
+\Pi \overline{\mathbf{f}}
+$$
 
 ---
 
@@ -325,14 +357,16 @@ $$
 $$
 {\Delta \mathbf{v}}_\ast =
 \arg \min_{\Delta \mathbf{v}}
-\left\|{\mathbf{r}(\widetilde{\Phi} \mathbf{v})
-+ \mathrm{J}(\widetilde{\Phi}  \mathbf{v})
+\left\|{\widehat{\mathbf{r}}(\widetilde{\Phi} \mathbf{v})
++ \widehat{\mathrm{J}}(\widetilde{\Phi}  \mathbf{v})
 \widetilde{\Phi} {\Delta \mathbf{v}}}\right\|
 $$
 
-#### Предварительное вычисление линейных операторов
+#### Предварительная свёртка линейных операций
 
-еуые
+$$
+\mathrm{L} \mathbf{f} \rightarrow \mathrm{L} \Pi \overline{\mathbf{f}}  \rightarrow \widehat{\mathrm{L}} \overline{\mathbf{f}}
+$$
 
 ---
 
