@@ -372,6 +372,23 @@ $$
 
 ---
 
+## Модуль для MRST
+*MATLAB Reservoir Simulation Toolbox*
+
+Пример: моделирование пятиточечной системы разработки
+
+---
+
+![bg fit 99%](./MRST-FOM-SAT-slide.png)
+![bg fit 99%](./MRST-ROM-SAT-slide.png)
+
+---
+
+![bg fit  99%](./MRST-DIF-SAT-slide.png)
+![bg fit  99%](./MRST-DIF-PRES-slide.png)
+
+---
+
 ## Обратные задачи нефтегазового моделирования
 
 ---
