@@ -235,14 +235,59 @@ $$
 Эмпирически-аппроксимированная нелинейная задача
 
 $$
-asd
+{\Delta \mathbf{v}}_\ast =
+\arg \min_{\Delta \mathbf{v}}
+\left\|{\mathbf{r}(\widetilde{\Phi} \mathbf{v})
++ \mathrm{J}(\widetilde{\Phi}  \mathbf{v})
+\widetilde{\Phi} {\Delta \mathbf{v}}}\right\|
 $$
+
+Проекция переопределённой задачи на подпространство $\mathrm{P}$
+
+$$
+\mathrm{P}^{\text{T}} \mathrm{J} \widetilde{\Phi} {\Delta \mathbf{v}} = - \mathrm{P}^{\text{T}} \mathbf{r}
+$$
+
+Основные виды проекций
+- Галеркина: $\mathrm{P}_{\text{G}} = \widetilde{\Phi}$
+- **Линейно-регрессионная** (LSPG): $\mathrm{P}_{\text{LS}} = \mathrm{J} \widetilde{\Phi}$
 
 ---
 
-![width:990px](../images/ECMOR/3-ROM-I.png)
-
+![width:990px](./3-ROM-I.png)
 Качество и производительность низкоразмерного представления
+
+---
+
+#### Измерение сходимости
+
+Сходящийся регрессионный процесс
+$$
+\begin{matrix}
+\left\|
+    \mathrm{P}^{\text{T}} \mathbf{r}
+\right\| \rightarrow 0 &&
+\left\|
+    \mathbf{r}
+\right\| \rightarrow \varepsilon_\text{min} \geqslant 0
+\end{matrix}
+$$
+
+Исходная метрика сходимости с точностью $\varepsilon$
+
+$$
+\left\|
+ \mathbf{r} / \dim \mathbf{r}
+\right\| = \varepsilon_\text{FOM} \leqslant \varepsilon
+$$
+
+Адаптированная **сопоставимая** метрика $\varepsilon$
+
+$$
+\left\|
+  \mathrm{P}^{\text{T}}_\text{G} \mathbf{r} / \dim \mathbf{v}
+\right\| = \varepsilon_\text{ROM} \leqslant \varepsilon
+$$
 
 ---
 
