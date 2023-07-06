@@ -361,7 +361,47 @@ $$
 
 ---
 
-### Оптимизация расположения скважин
+### Поиск оптимального расположения скважин
+
+![w:2000](./9-Problem-Q.png)
+Применимость извлеченных паттернов при смещении источника
+
+---
+
+Ведущая линейная динамика
+
+$$
+\frac{\partial u}{\partial t} - \kappa \frac{\partial^2 u}{\partial x^2} = q
+$$
+
+Линейное преобразование координат
+$$
+\begin{matrix}
+\frac{\partial \hat{t}}{\partial t} = \alpha
+&&
+\frac{\partial \hat{x}}{\partial x} = \beta
+\end{matrix}
+$$
+
+Инвариантность определяющего уравнения
+
+$$
+\frac{\partial u}{\partial t} - \textcolor{red}{\frac{\beta^2}{\alpha}} \kappa \frac{\partial^2 u}{\partial x^2} = \frac{q}{\textcolor{red}{\alpha}}
+$$
+
+---
+
+![bg left:35% 120%](../images/ECMOR/12-Domains.png)
+
+**Кусочно-инвариантные**
+преобразования координат
+![w:2000](../images/ECMOR/DWC-POD.png)
+
+---
+
+![w:2000](../images/ECMOR/14-Result-Q.png)
+
+---
 
 ### Адаптация исторических данных
 
@@ -372,7 +412,11 @@ $$
 1. пункт
 2. фыв
 ---
+
 TODO Развитие темы
+
+- asda
+- asf
 
 ---
 
